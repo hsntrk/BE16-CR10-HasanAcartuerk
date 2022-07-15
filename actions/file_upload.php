@@ -7,6 +7,7 @@ function file_upload($image)
     $result->fileName = 'product.png';
     $result->error = 1;
     $fileName = $image["name"];
+    $fileType = $image["type"];
     $fileTmpName = $image["tmp_name"];
     $fileError = $image["error"];
     $fileSize = $image["size"];
