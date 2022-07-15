@@ -19,7 +19,8 @@ if (isset($_GET["status"])) {
         <td>" . $row['title'] . "</td>
         <td>" . $row['isbn'] . "</td>
         <td>" . $row['status'] . "</td>
-        <td class='text-center'>
+        <td>" . $row['publisher_name'] . "</td>
+        <td>
         <a href='details.php?id=" . $row['id'] . "'>
         <button class='btn btn-info btn-sm' type='button'>Details</button></a>
         <a href='update.php?id=" . $row['id'] . "'>
@@ -46,7 +47,8 @@ if (isset($_GET["status"])) {
         <td>" . $row['title'] . "</td>
         <td>" . $row['isbn'] . "</td>
         <td>" . $row['status'] . "</td>
-        <td class='text-center'>
+        <td>" . $row['publisher_name'] . "</td>
+        <td>
         <a href='details.php?id=" . $row['id'] . "'>
         <button class='btn btn-info btn-sm' type='button'>Details</button></a>
         <a href='update.php?id=" . $row['id'] . "'>
@@ -133,6 +135,7 @@ mysqli_close(($connect));
                     <th>Title</th>
                     <th>ISBN</th>
                     <th>Status</th>
+                    <th>Publisher Name</th>
                     <th>Actions</th>
                 </tr>
             </thead>

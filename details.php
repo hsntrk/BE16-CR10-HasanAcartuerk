@@ -70,7 +70,10 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h2 class="card-title"><?= $row["title"] ?></h2>
+                        <h2 class="card-title"><?= $row["type"] ?></h2>
+                        <hr>
+                        <h4 class="card-title"><?= $row["title"] ?></h4>
+                        <hr>
                         <p class="card-text">
                             <strong>ISBN:</strong> <?= $row["isbn"] ?>
                         </p>

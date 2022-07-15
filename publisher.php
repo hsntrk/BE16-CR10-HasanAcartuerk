@@ -1,7 +1,9 @@
 <?php
 require_once "actions/db_connect.php";
 
-$sql = "SELECT * from books";
+$id = $_GET["id"];
+$publisher_name = $_GET["publisher_name"];
+$sql = "SELECT * from books where publisher_name = $publisher_name";
 $result = mysqli_query($connect, $sql);
 $body = "";
 
@@ -13,8 +15,8 @@ if (mysqli_num_rows($result) > 0) {
         <td>" . $row['title'] . "</td>
         <td>" . $row['isbn'] . "</td>
         <td>" . $row['status'] . "</td>
-        <td><a href='publisher.php?publisher_name=" . $row['publisher_name'] . "'>
-        <button class='btn btn-outline-secondary btn-sm' type='button'>" . $row['publisher_name'] . "</button></a></td>
+        <td> <a href='publisher.php?id=" . $row['publisher_name'] . "'>
+        <button class='btn btn-outline-secondary btn-sm' type='button'>{$row['publisher_name']} </button></a></td>
         <td>
         <a href='details.php?id=" . $row['id'] . "'>
         <button class='btn btn-info btn-sm' type='button'>Details</button></a>
@@ -31,6 +33,7 @@ if (mysqli_num_rows($result) > 0) {
 
 
 mysqli_close(($connect));
+
 ?>
 
 
@@ -55,68 +58,34 @@ mysqli_close(($connect));
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Media</title>
+    <title>Publisher</title>
 </head>
 
-<body class=" bg-light">
-
-    <!-- navbar -->
-
-    <nav class="navbar navbar-expand-lg bg-secondary align-items-center ">
-
-        <a href="#" class="navbar-brand navbar-dark  ms-3"><img src="images/logo.png" alt="" height="60vh">Big Library</a>
-
-        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse justify-content-between align-items-center" id="navmenu">
-            <ul class="navbar-nav navbar-dark mr-auto d-lg-flex justify-content-around align-items-center">
-                <li class="nav-item active"><a href="index.php" class="nav-link ">Home</a></li>
-                <li class="nav-item"><a href="admin.php" class="nav-link ">Media</a></li>
-                <li class="nav-item"><a href="#" class="nav-link ">Services</a></li>
-                <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
-            </ul>
-        </div>
-
-    </nav>
-
-    <!-- media library from php -->
-    <div class="manageProduct w-75 mt-3">
-        <div class='mb-3 d-flex p-2 justify-content-between'>
-            <a href="create.php"><button class='btn btn-outline-info' type="button">Add MEDIA to your library</button></a>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filter STATUS
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="filter.php">All</a></li>
-                    <li><a class="dropdown-item" href="filter.php?status=available">Available</a></li>
-                    <li><a class="dropdown-item" href="filter.php?status=reserved">Reserved</a></li>
-                </ul>
+<body>
+    <div class='container'>
+        <div class='row'>
+            <div class="text-center fw-bold fs-1"><?php echo $publisher_name; ?>
             </div>
+            <hr>
+            <?php
+            echo $body;
+            ?>
         </div>
-        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>Big Library Media Database</p>
-        <table class='table table-striped'>
-            <thead class='table-success'>
-                <tr>
-                    <th>Cover</th>
-                    <th>Title</th>
-                    <th>ISBN</th>
-                    <th>Status</th>
-                    <th>Publisher Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php echo $body ?>
-            </tbody>
-        </table>
     </div>
 
 
+
+
+
+
+
+
+
+
+
+
     <!-- social media icons -->
-    <section class="container-fluid pb-1 bg-secondary text-light">
+    <section class=" container-fluid pb-1 bg-secondary text-light">
         <div class="container">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="m-1 p-1 d-lg-flex justify-content-center">
