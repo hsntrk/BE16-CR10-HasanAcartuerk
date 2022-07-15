@@ -1,0 +1,31 @@
+* {
+  font-family: "Courgette", cursive;
+  list-style: none;
+  text-decoration: none;
+}
+
+.back-pic {
+  background-size: cover;
+  min-height: 75vh;
+  position: relative;
+  background-position: center;
+}
+
+.enter-library {
+  padding: 8vh;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.enter-library a {
+  text-decoration: none;
+  list-style: none;
+  color: white;
+}
+
+.enter-library a:hover {
+  color: rgb(174, 138, 138);
+}
+
+footer {
+  padding: 4vh;
+}
