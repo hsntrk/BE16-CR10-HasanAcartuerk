@@ -16,6 +16,11 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+a {
+  text-decoration: none;
+  list-style: none;
+}
+
 .enter-library a {
   text-decoration: none;
   list-style: none;
@@ -28,4 +33,25 @@
 
 footer {
   padding: 4vh;
+}
+
+.manageProduct {
+  margin: auto;
+}
+
+.img-thumbnail {
+  width: 70px !important;
+  height: 70px !important;
+}
+
+td {
+  text-align: left;
+  vertical-align: middle;
+}
+tr {
+  text-align: center;
+}
+
+th {
+  text-align: left;
 }

@@ -1,17 +1,13 @@
 <?php
 require_once "actions/db_connect.php";
 
-$sql = "SELECT * from books";
+$id = $_GET["id"];
+$sql = "select * from books where id = $id";
 $result = mysqli_query($connect, $sql);
-$body = "";
+$row = mysqli_fetch_assoc($result);
 
-
-
-mysqli_close(($connect));
 ?>
 
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -32,10 +28,10 @@ mysqli_close(($connect));
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Big Library</title>
+    <title>Details</title>
 </head>
 
-<body>
+<body class=" bg-light">
 
     <!-- navbar -->
 
@@ -52,25 +48,63 @@ mysqli_close(($connect));
                 <li class="nav-item active"><a href="index.php" class="nav-link ">Home</a></li>
                 <li class="nav-item"><a href="admin.php" class="nav-link ">Media</a></li>
                 <li class="nav-item"><a href="#" class="nav-link ">Services</a></li>
-                <a class="btn btn-outline-light m-3" href="admin.php"><i class="fa-solid fa-right-to-bracket"></i> Login to Library</a>
-
+                <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
             </ul>
         </div>
 
     </nav>
 
-    <!-- head section background image  -->
-    <div class="back-pic d-flex justify-content-center align-items-center " style="background-image: url(images/background.jpg);">
-        <div class="enter-library text-center text-light animate__animated animate__backInDown">
-            <a href="admin.php">
-                <h1><i class="fa-solid fa-door-open"></i> Enter the Library</h1>
-            </a>
+    <!-- media library from php -->
+    <div class="manageProduct w-75 mt-3">
+        <div class='mb-3 d-flex p-2 justify-content-between'>
+            <a href="create.php"><button class='btn btn-outline-info' type="button">Add MEDIA to your library</button></a>
+
+        </div>
+
+        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>Details of the <?= $row["type"] ?> from the Author <?= $row["author_first_name"] ?> </p>
+
+        <div class="card mb-3" style="max-width: 80vw">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src='pictures/<?= $row["image"] ?>' class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h3 class="card-title"><?= $row["title"] ?></h3>
+                        <p class="card-text">
+                            <strong>ISBN:</strong> <?= $row["isbn"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Description:</strong> <?= $row["short_description"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Author Name:</strong> <?= $row["author_first_name"] ?> <?= $row["author_last_name"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Publisher Name:</strong> <?= $row["publisher_name"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Publisher Address:</strong> <?= $row["publisher_address"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Status Availability: </strong> <?= $row["status"] ?>
+                        </p>
+                        <p class="card-text"><small class="text-muted">publishing date <?= $row["publish_date"] ?></small></p>
+                        <a href="details.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-info btn-sm" type="button">Details</button></a>
+                        <a href="update.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-primary btn-sm" type="button">Update</button></a>
+                        <a href="delete.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-danger btn-sm" type="button">Delete</button></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 
     <!-- social media icons -->
-    <section class="container-fluid pb-1 bg-secondary text-light">
+    <section class=" container-fluid pb-1 bg-secondary text-light">
         <div class="container">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="m-1 p-1 d-lg-flex justify-content-center">
@@ -98,6 +132,9 @@ mysqli_close(($connect));
 
     <!-- my script js -->
     <script src="js/script.js"></script>
+
+
+
 
 
 </body>

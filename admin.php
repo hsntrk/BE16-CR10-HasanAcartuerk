@@ -6,6 +6,27 @@ $result = mysqli_query($connect, $sql);
 $body = "";
 
 
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $body .= "<tr>
+        <td><img class='img-thumbnail' src='pictures/" . $row['image'] . "'</td>
+        <td>" . $row['title'] . "</td>
+        <td>" . $row['isbn'] . "</td>
+        <td>" . $row['status'] . "</td>
+        <td class='text-center'>
+        <a href='details.php?id=" . $row['id'] . "'>
+        <button class='btn btn-info btn-sm' type='button'>Details</button></a>
+        <a href='update.php?id=" . $row['id'] . "'>
+        <button class='btn btn-primary btn-sm' type='button'>Update</button></a>
+        <a href='delete.php?id=" . $row['id'] . "'>
+        <button class='btn btn-danger btn-sm' type='button'>Delete</button></a>
+        </td>
+        </tr>";
+    }
+} else {
+    $body = "<tr><td colspan='6'><center>No Data Available </center></td></tr>";
+}
+
 
 mysqli_close(($connect));
 ?>
@@ -32,10 +53,10 @@ mysqli_close(($connect));
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Big Library</title>
+    <title>Media</title>
 </head>
 
-<body>
+<body class=" bg-light">
 
     <!-- navbar -->
 
@@ -52,20 +73,42 @@ mysqli_close(($connect));
                 <li class="nav-item active"><a href="index.php" class="nav-link ">Home</a></li>
                 <li class="nav-item"><a href="admin.php" class="nav-link ">Media</a></li>
                 <li class="nav-item"><a href="#" class="nav-link ">Services</a></li>
-                <a class="btn btn-outline-light m-3" href="admin.php"><i class="fa-solid fa-right-to-bracket"></i> Login to Library</a>
-
+                <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
             </ul>
         </div>
 
     </nav>
 
-    <!-- head section background image  -->
-    <div class="back-pic d-flex justify-content-center align-items-center " style="background-image: url(images/background.jpg);">
-        <div class="enter-library text-center text-light animate__animated animate__backInDown">
-            <a href="admin.php">
-                <h1><i class="fa-solid fa-door-open"></i> Enter the Library</h1>
-            </a>
+    <!-- media library from php -->
+    <div class="manageProduct w-75 mt-3">
+        <div class='mb-3 d-flex p-2 justify-content-between'>
+            <a href="create.php"><button class='btn btn-outline-info' type="button">Add MEDIA to your library</button></a>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    Filter STATUS
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item" href="filter.php">All</a></li>
+                    <li><a class="dropdown-item" href="filter.php?status=available">Available</a></li>
+                    <li><a class="dropdown-item" href="filter.php?status=reserved">Reserved</a></li>
+                </ul>
+            </div>
         </div>
+        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>Big Library Media Database</p>
+        <table class='table table-striped'>
+            <thead class='table-success'>
+                <tr>
+                    <th>Cover</th>
+                    <th>Title</th>
+                    <th>ISBN</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php echo $body ?>
+            </tbody>
+        </table>
     </div>
 
 

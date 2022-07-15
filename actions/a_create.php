@@ -1,16 +1,40 @@
 <?php
-require_once "actions/db_connect.php";
+require_once 'db_connect.php';
+require_once 'file_upload.php';
 
-$sql = "SELECT * from books";
-$result = mysqli_query($connect, $sql);
-$body = "";
+if ($_POST) {
+    $isbn = $_POST["isbn"];
+    $title = $_POST["title"];
+    $uploadError = '';
+    $image = file_upload($_FILES["image"]);
+    $short_description = $_POST["short_description"];
+    $type = $_POST["type"];
+    $author_first_name = $_POST["author_first_name"];
+    $author_last_name = $_POST["author_last_name"];
+    $publisher_name = $_POST["publisher_name"];
+    $publisher_address = $_POST["publisher_address"];
+    $status = $_POST["status"];
 
+    $sql = "INSERT INTO `books`(`isbn`, `title`, `image`, `short_description`, `type`, `author_first_name`, `author_last_name`, `publisher_name`, `publisher_address`, `status`) VALUES ( '$isbn', '$title', '$image->fileName', '$short_description', '$type', '$author_first_name', '$author_last_name', '$publisher_name', '$publisher_address', '$status')";
 
-
-mysqli_close(($connect));
+    if (mysqli_query($connect, $sql) == true) {
+        $class = "success";
+        $message = "The entry below was successfully created <br>
+    <table class='table w-50'><tr>
+    <td> $title </td>
+    <td> $type </td>
+    </tr></table><hr>";
+        $uploadError = ($image->error != 0) ? $image->ErrorMessage : '';
+    } else {
+        $class = "danger";
+        $message = "Error while creating record. Try again: <br>" . $connect->error;
+        $uploadError = ($image->error != 0) ? $image->ErrorMessage : '';
+    }
+    mysqli_close($connect);
+} else {
+    header("location: ../error.php");
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,23 +43,23 @@ mysqli_close(($connect));
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- bootstrap cdn -->
-    <?php require_once "components/bootstrap.php" ?>
+    <?php require_once "../components/bootstrap.php" ?>
     <!-- fontawesome kit icons -->
-    <?php require_once "components/fontawesome.php" ?>
+    <?php require_once "../components/fontawesome.php" ?>
     <!-- bootstrap icons -->
-    <?php require_once "components/bootstrap_icons.php" ?>
+    <?php require_once "../components/bootstrap_icons.php" ?>
     <!-- Font Family -->
-    <?php require_once "components/font_family.php" ?>
+    <?php require_once "../components/font_family.php" ?>
     <!-- Animate style -->
-    <?php require_once "components/animate.php" ?>
+    <?php require_once "../components/animate.php" ?>
 
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Big Library</title>
+    <title>Added to Media</title>
 </head>
 
-<body>
+<body class="bg-light">
 
     <!-- navbar -->
 
@@ -52,22 +76,23 @@ mysqli_close(($connect));
                 <li class="nav-item active"><a href="index.php" class="nav-link ">Home</a></li>
                 <li class="nav-item"><a href="admin.php" class="nav-link ">Media</a></li>
                 <li class="nav-item"><a href="#" class="nav-link ">Services</a></li>
-                <a class="btn btn-outline-light m-3" href="admin.php"><i class="fa-solid fa-right-to-bracket"></i> Login to Library</a>
-
+                <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
             </ul>
         </div>
 
     </nav>
 
-    <!-- head section background image  -->
-    <div class="back-pic d-flex justify-content-center align-items-center " style="background-image: url(images/background.jpg);">
-        <div class="enter-library text-center text-light animate__animated animate__backInDown">
-            <a href="admin.php">
-                <h1><i class="fa-solid fa-door-open"></i> Enter the Library</h1>
+    <div class="container">
+        <div class="mt-3 mb-3">
+            <h1>Create request response</h1>
+        </div>
+        <div class="alert alert-<?php echo $class; ?>" role="alert">
+            <p><?php echo ($message) ?? '' ?></p>
+            <p><?php echo ($uploadError) ?? '' ?></p>
+            <a href="../admin.php" class="btn btn-outline-danger btn-lg m-3 ps-4 pe-4"> <i class="fa-solid fa-circle-arrow-left"></i> &ensp; Back to Media
             </a>
         </div>
     </div>
-
 
     <!-- social media icons -->
     <section class="container-fluid pb-1 bg-secondary text-light">
