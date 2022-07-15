@@ -1,41 +1,21 @@
 <?php
-require_once 'db_connect.php';
-require_once 'file_upload.php';
+require_once "actions/db_connect.php";
+$id = $_GET["id"];
 
-if ($_POST) {
-    $isbn = $_POST["isbn"];
-    $title = $_POST["title"];
-    $uploadError = '';
-    $image = file_upload($_FILES["image"]);
-    $short_description = $_POST["short_description"];
-    $type = $_POST["type"];
-    $author_first_name = $_POST["author_first_name"];
-    $author_last_name = $_POST["author_last_name"];
-    $publisher_name = $_POST["publisher_name"];
-    $publisher_address = $_POST["publisher_address"];
-    $publish_date = $_POST["publish_date"];
-    $status = $_POST["status"];
+if (isset($_POST["submit"])) {
+    $sql = "DELETE FROM books WHERE id = $id";
 
-    $sql = "INSERT INTO `books`(`isbn`, `title`, `image`, `short_description`, `type`, `author_first_name`, `author_last_name`, `publisher_name`, `publisher_address`, `publish_date`, `status`) VALUES ( '$isbn', '$title', '$image->fileName', '$short_description', '$type', '$author_first_name', '$author_last_name', '$publisher_name', '$publisher_address', '$publish_date', '$status')";
+    $result = mysqli_query($connect, $sql);
 
-    if (mysqli_query($connect, $sql) == true) {
-        $class = "success";
-        $message = "The entry below was successfully created <br>
-    <table class='table w-50'><tr>
-    <td> $title </td>
-    <td> $type </td>
-    </tr></table><hr>";
-        $uploadError = ($image->error != 0) ? $image->ErrorMessage : '';
+    if ($result) {
+        // header("Location: index.php");
+        header("refresh:2;url=admin.php");
     } else {
-        $class = "danger";
-        $message = "Error while creating record. Try again: <br>" . $connect->error;
-        $uploadError = ($image->error != 0) ? $image->ErrorMessage : '';
+        echo "Error";
     }
-    mysqli_close($connect);
-} else {
-    header("location: ../error.php");
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,20 +24,20 @@ if ($_POST) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- bootstrap cdn -->
-    <?php require_once "../components/bootstrap.php" ?>
+    <?php require_once "components/bootstrap.php" ?>
     <!-- fontawesome kit icons -->
-    <?php require_once "../components/fontawesome.php" ?>
+    <?php require_once "components/fontawesome.php" ?>
     <!-- bootstrap icons -->
-    <?php require_once "../components/bootstrap_icons.php" ?>
+    <?php require_once "components/bootstrap_icons.php" ?>
     <!-- Font Family -->
-    <?php require_once "../components/font_family.php" ?>
+    <?php require_once "components/font_family.php" ?>
     <!-- Animate style -->
-    <?php require_once "../components/animate.php" ?>
+    <?php require_once "components/animate.php" ?>
 
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Added to Media</title>
+    <title>Delete</title>
 </head>
 
 <body class="bg-light">
@@ -83,20 +63,25 @@ if ($_POST) {
 
     </nav>
 
-    <div class="container">
-        <div class="mt-3 mb-3">
-            <h1>Create request response</h1>
-        </div>
-        <div class="alert alert-<?php echo $class; ?>" role="alert">
-            <p><?php echo ($message) ?? '' ?></p>
-            <p><?php echo ($uploadError) ?? '' ?></p>
-            <a href="../admin.php" class="btn btn-outline-danger btn-lg m-3 ps-4 pe-4"> <i class="fa-solid fa-circle-arrow-left"></i> &ensp; Back to Media
-            </a>
+    <!-- Delete Part -->
+    <div class="d-flex  justify-content-center align-item-center m-5">
+        <div class="card bg-warning text-center" style="width: 25rem;">
+            <div class="card-body m-3">
+                <h1 class="card-title text-danger"><i class="fa-solid fa-triangle-exclamation"></i>&nbsp; Attention &nbsp;<i class="fa-solid fa-triangle-exclamation"></i></h1>
+                <h2 class="card-text">Are you sure you want to delete?</h2>
+                <div class="d-flex justify-content-center m-3">
+                    <form method="POST">
+                        <input type="submit" class="btn btn-lg btn-outline-danger me-5" name="submit" value="Yes">
+                    </form>
+                    <a class="btn btn-lg btn-outline-success ms-5" href="admin.php">No</a>
+
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- social media icons -->
-    <section class="container-fluid pb-1 bg-secondary text-light">
+    <section class=" container-fluid pb-1 bg-secondary text-light">
         <div class="container">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="m-1 p-1 d-lg-flex justify-content-center">
@@ -124,6 +109,8 @@ if ($_POST) {
 
     <!-- my script js -->
     <script src="js/script.js"></script>
+
+
 
 
 </body>

@@ -70,7 +70,7 @@ $row = mysqli_fetch_assoc($result);
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">
-                        <h3 class="card-title"><?= $row["title"] ?></h3>
+                        <h2 class="card-title"><?= $row["title"] ?></h2>
                         <p class="card-text">
                             <strong>ISBN:</strong> <?= $row["isbn"] ?>
                         </p>
@@ -98,8 +98,11 @@ $row = mysqli_fetch_assoc($result);
                             <button class="btn btn-danger btn-sm" type="button">Delete</button></a>
                     </div>
                 </div>
+
             </div>
         </div>
+        <a href="admin.php" class="btn btn-outline-info btn-lg ps-4 pe-4 mb-5 mt-3"><i class="fa-solid fa-backward"></i>&ensp; Return to Media &ensp;
+        </a>
     </div>
 
 
