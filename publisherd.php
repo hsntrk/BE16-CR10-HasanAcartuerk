@@ -1,38 +1,40 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 require_once "actions/db_connect.php";
-
-$sql = "SELECT * from books";
+$publisher_name = $_GET["publisher_name"];
+$sql = "SELECT * FROM books WHERE publisher_name = '$publisher_name'";
 $result = mysqli_query($connect, $sql);
-$body = "";
 
+$body = "";
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_assoc($result)) {
-        $body .= "<tr>
-        <td><img class='img-thumbnail' src='pictures/" . $row['image'] . "'</td>
-        <td>" . $row['title'] . "</td>
-        <td>" . $row['isbn'] . "</td>
-        <td>" . $row['status'] . "</td>
-        <td><a href='publisher.php?id=" . $row['id'] . "'>
-        <button class='btn btn-outline-secondary btn-sm' type='button'>" . $row['publisher_name'] . "</button></a></td>
-        <td>
-        <a href='details.php?id=" . $row['id'] . "'>
-        <button class='btn btn-info btn-sm' type='button'>Details</button></a>
-        <a href='update.php?id=" . $row['id'] . "'>
-        <button class='btn btn-primary btn-sm' type='button'>Update</button></a>
-        <a href='delete.php?id=" . $row['id'] . "'>
-        <button class='btn btn-danger btn-sm' type='button'>Delete</button></a>
-        </td>
-        </tr>";
-    }
+
+        $body .= "
+            <div class='card shadow-lg p-3 mb-5 bg-white rounded' style='width: 18rem;'>
+            <img class='card-img-top' src='pictures/" . $row['image'] . "'>
+            <div class='card-body'>
+                <h2 class='card-title'>" . $row['title'] . "</h2>
+                <p class='card-text'>" . $row['short_description'] . "</p>
+            </div>
+            <div class='card-footer'>
+                <small class='text-muted'>Publishing Date:&nbsp;" . $row['publish_date'] . "</small></div>
+            </div>
+        ";
+    };
 } else {
-    $body = "<tr><td colspan='6'><center>No Data Available </center></td></tr>";
+    $body = "
+       <tr>
+         <td> colspan='5' class='text-center'>Not Data </td>
+        </tr>
+    
+    ";
 }
 
-
-mysqli_close(($connect));
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -55,10 +57,10 @@ mysqli_close(($connect));
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Media</title>
+    <title>Publisher</title>
 </head>
 
-<body class=" bg-light">
+<body class="bg-light">
 
     <!-- navbar -->
 
@@ -78,45 +80,30 @@ mysqli_close(($connect));
                 <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
             </ul>
         </div>
-
     </nav>
 
     <!-- media library from php -->
     <div class="manageProduct w-75 mt-3">
         <div class='mb-3 d-flex p-2 justify-content-between'>
             <a href="create.php"><button class='btn btn-outline-info' type="button">Add MEDIA to your library</button></a>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                    Filter STATUS
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="filter.php">All</a></li>
-                    <li><a class="dropdown-item" href="filter.php?status=available">Available</a></li>
-                    <li><a class="dropdown-item" href="filter.php?status=reserved">Reserved</a></li>
-                </ul>
-            </div>
         </div>
-        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>Big Library Media Database</p>
-        <table class='table table-striped'>
-            <thead class='table-success'>
-                <tr>
-                    <th>Cover</th>
-                    <th>Title</th>
-                    <th>ISBN</th>
-                    <th>Status</th>
-                    <th>Publisher Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php echo $body ?>
-            </tbody>
-        </table>
+
+        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>All Media from the Publisher: <?php echo $publisher_name; ?> </p>
+
+        <div class="d-flex justify-content-between p-3 text-center">
+
+            <?php
+            echo $body;
+            ?>
+
+        </div>
+        <a href="admin.php" class="btn btn-outline-info btn-lg ps-4 pe-4 mb-5 mt-3"><i class="fa-solid fa-backward"></i>&ensp; Return to Media &ensp;
+        </a>
     </div>
 
 
     <!-- social media icons -->
-    <section class="container-fluid pb-1 bg-secondary text-light">
+    <section class=" container-fluid pb-1 bg-secondary text-light">
         <div class="container">
             <div class="d-flex justify-content-center align-items-center">
                 <div class="m-1 p-1 d-lg-flex justify-content-center">

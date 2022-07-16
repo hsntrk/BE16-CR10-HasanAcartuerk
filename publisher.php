@@ -2,42 +2,12 @@
 require_once "actions/db_connect.php";
 
 $id = $_GET["id"];
-$publisher_name = $_GET["publisher_name"];
-$sql = "SELECT * from books where publisher_name = $publisher_name";
+$sql = "select * from books where id = $id";
 $result = mysqli_query($connect, $sql);
-$body = "";
-
-
-if (mysqli_num_rows($result) > 0) {
-    while ($row = mysqli_fetch_assoc($result)) {
-        $body .= "<tr>
-        <td><img class='img-thumbnail' src='pictures/" . $row['image'] . "'</td>
-        <td>" . $row['title'] . "</td>
-        <td>" . $row['isbn'] . "</td>
-        <td>" . $row['status'] . "</td>
-        <td> <a href='publisher.php?id=" . $row['publisher_name'] . "'>
-        <button class='btn btn-outline-secondary btn-sm' type='button'>{$row['publisher_name']} </button></a></td>
-        <td>
-        <a href='details.php?id=" . $row['id'] . "'>
-        <button class='btn btn-info btn-sm' type='button'>Details</button></a>
-        <a href='update.php?id=" . $row['id'] . "'>
-        <button class='btn btn-primary btn-sm' type='button'>Update</button></a>
-        <a href='delete.php?id=" . $row['id'] . "'>
-        <button class='btn btn-danger btn-sm' type='button'>Delete</button></a>
-        </td>
-        </tr>";
-    }
-} else {
-    $body = "<tr><td colspan='6'><center>No Data Available </center></td></tr>";
-}
-
-
-mysqli_close(($connect));
+$row = mysqli_fetch_assoc($result);
 
 ?>
 
-
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -58,30 +28,93 @@ mysqli_close(($connect));
     <!-- my style css -->
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Publisher</title>
+    <title>Details</title>
 </head>
 
-<body>
-    <div class='container'>
-        <div class='row'>
-            <div class="text-center fw-bold fs-1"><?php echo $publisher_name; ?>
-            </div>
-            <hr>
-            <?php
-            echo $body;
-            ?>
+<body class=" bg-light">
+
+    <!-- navbar -->
+
+    <nav class="navbar navbar-expand-lg bg-secondary align-items-center ">
+
+        <a href="#" class="navbar-brand navbar-dark  ms-3"><img src="images/logo.png" alt="" height="60vh">Big Library</a>
+
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-between align-items-center" id="navmenu">
+            <ul class="navbar-nav navbar-dark mr-auto d-lg-flex justify-content-around align-items-center">
+                <li class="nav-item active"><a href="index.php" class="nav-link ">Home</a></li>
+                <li class="nav-item"><a href="admin.php" class="nav-link ">Media</a></li>
+                <li class="nav-item"><a href="#" class="nav-link ">Services</a></li>
+                <a href="index.php" class="btn btn-outline-light m-3"> EXIT the Library <i class="fa-solid fa-right-from-bracket"></i></a>
+            </ul>
         </div>
+
+    </nav>
+
+
+    <?php header("Location: publisherd.php?publisher_name={$row['publisher_name']}"); ?>
+
+
+    <!-- media library from php -->
+    <div class="manageProduct w-75 mt-3">
+        <div class='mb-3 d-flex p-2 justify-content-between'>
+            <a href="create.php"><button class='btn btn-outline-info' type="button">Add MEDIA to your library</button></a>
+
+        </div>
+
+        <p class='h2 text-center bg-secondary bg-gradient text-white p-4'>Details of the <?= $row["type"] ?> from the Author <?= $row["author_first_name"] ?> </p>
+
+        <div class="card mb-3" style="max-width: 80vw">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src='pictures/<?= $row["image"] ?>' class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+
+                    <div class="card-body">
+                        <h2 class="card-title"><?= $row["type"] ?></h2>
+                        <hr>
+                        <h4 class="card-title"><?= $row["title"] ?></h4>
+                        <hr>
+                        <p class="card-text">
+                            <strong>ISBN:</strong> <?= $row["isbn"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Description:</strong> <?= $row["short_description"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Author Name:</strong> <?= $row["author_first_name"] ?> <?= $row["author_last_name"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Publisher Name:</strong>
+                            <a href="publisherd.php?publisher_name=<?= $row["publisher_name"] ?>">
+                                <button class="btn btn-outline-secondary btn-sm" type="button"><?= $row["publisher_name"] ?></button></a>
+                        </p>
+                        <p class=" card-text">
+                            <strong>Publisher Address:</strong> <?= $row["publisher_address"] ?>
+                        </p>
+                        <p class="card-text">
+                            <strong>Status Availability: </strong> <?= $row["status"] ?>
+                        </p>
+                        <p class="card-text"><small class="text-muted">publishing date <?= $row["publish_date"] ?></small></p>
+                        <a href="details.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-info btn-sm" type="button">Details</button></a>
+                        <a href="update.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-primary btn-sm" type="button">Update</button></a>
+                        <a href="delete.php?id=<?= $row["id"] ?>">
+                            <button class="btn btn-danger btn-sm" type="button">Delete</button></a>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <a href="admin.php" class="btn btn-outline-info btn-lg ps-4 pe-4 mb-5 mt-3"><i class="fa-solid fa-backward"></i>&ensp; Return to Media &ensp;
+        </a>
     </div>
-
-
-
-
-
-
-
-
-
-
 
 
     <!-- social media icons -->
@@ -113,6 +146,9 @@ mysqli_close(($connect));
 
     <!-- my script js -->
     <script src="js/script.js"></script>
+
+
+
 
 
 </body>
